@@ -1,37 +1,76 @@
-# SignBridge Care
+# SignBridge
+
+AI-powered Healthcare Communication Platform
+
+---
 
 ## Vision
 
-SignBridge Care is an AI-powered healthcare communication platform designed to enable real-time conversations between sign language users and healthcare professionals.
-
-Our mission is to ensure that no patient loses their independence because of a communication barrier.
+Communication should never depend on a person's ability to hear or speak.
 
 ---
 
-## Mission
+## Current Status
 
-To make healthcare communication accessible, independent, and inclusive through Artificial Intelligence.
+🟢 Sprint 1
+Planning & Product Design
 
 ---
 
-## Current Stage
+## Features
 
-🚧 Planning & Research
+- Real-time Sign Recognition
+- Medical Communication
+- Speech Recognition
+- Conversation History
+- Privacy First
 
 ---
 
 ## Tech Stack
 
-- React
-- FastAPI
-- Python
-- OpenCV
-- MediaPipe
-- PyTorch
-- PostgreSQL
+React
+
+FastAPI
+
+PyTorch
+
+MediaPipe
+
+OpenCV
+
+PostgreSQL
 
 ---
 
-## Status
+## Project Structure
 
-Sprint 1 – Product Design
+docs/
+
+frontend/
+
+backend/
+
+ai/
+
+database/
+
+datasets/
+
+---
+
+## Roadmap
+
+Sprint 1
+
+Sprint 2
+
+Sprint 3
+
+Sprint 4
+
+---
+
+## License
+
+MIT
