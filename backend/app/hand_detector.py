@@ -1,41 +1,33 @@
 import cv2
 import mediapipe as mp
 
-# Initialize MediaPipe Hands
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands()
 
-# Drawing utility
-mp_draw = mp.solutions.drawing_utils
+class HandDetector:
 
-# Start webcam
-cap = cv2.VideoCapture(0)
+    def __init__(self):
 
-while True:
-    success, frame = cap.read()
+        self.mp_hands = mp.solutions.hands
 
-    if not success:
-        break
+        self.hands = self.mp_hands.Hands(
+            max_num_hands=2,
+            min_detection_confidence=0.7,
+            min_tracking_confidence=0.7
+        )
 
-    rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    results = hands.process(rgb_frame)
+        self.drawer = mp.solutions.drawing_utils
 
-    if results.multi_hand_landmarks:
-        for hand_landmarks in results.multi_hand_landmarks:
-            mp_draw.draw_landmarks(
-                frame,
-                hand_landmarks,
-                mp_hands.HAND_CONNECTIONS
-            )
+    def detect(self, frame):
 
-    cv2.imshow("SignBridge Hand Detection", frame)
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-    # Exit if Q is pressed OR if the window is closed
-    if (
-        cv2.waitKey(1) & 0xFF == ord("q")
-        or cv2.getWindowProperty("SignBridge Hand Detection", cv2.WND_PROP_VISIBLE) < 1
-    ):
-        break
+        results = self.hands.process(rgb)
 
-cap.release()
-cv2.destroyAllWindows()
+        return results
+
+    def draw(self, frame, hand_landmarks):
+
+        self.drawer.draw_landmarks(
+            frame,
+            hand_landmarks,
+            self.mp_hands.HAND_CONNECTIONS
+        )

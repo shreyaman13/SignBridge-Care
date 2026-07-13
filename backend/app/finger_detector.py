@@ -1,41 +1,70 @@
 class FingerDetector:
+    """
+    Detects whether each finger is OPEN or CLOSED
+    using MediaPipe landmarks.
+    """
+
     def __init__(self):
-        # Landmark IDs for fingertips
-        self.tip_ids = [8, 12, 16, 20]
 
-        # Landmark IDs for the joints just below the fingertips
-        self.joint_ids = [6, 10, 14, 18]
+        self.tip_ids = {
+            "Thumb": 4,
+            "Index": 8,
+            "Middle": 12,
+            "Ring": 16,
+            "Pinky": 20
+        }
 
-        # Finger names
-        self.finger_names = [
-            "Index",
-            "Middle",
-            "Ring",
-            "Pinky"
-        ]
+        self.joint_ids = {
+            "Thumb": 3,
+            "Index": 6,
+            "Middle": 10,
+            "Ring": 14,
+            "Pinky": 18
+        }
 
-    def detect_fingers(self, landmarks):
-        """
-        Detect whether each finger is OPEN or CLOSED.
+    # -----------------------------
+    # THUMB
+    # -----------------------------
+    def detect_thumb(self, landmarks, hand_label):
 
-        Parameters:
-            landmarks: List of MediaPipe hand landmarks.
+        tip = landmarks[self.tip_ids["Thumb"]]
+        joint = landmarks[self.joint_ids["Thumb"]]
 
-        Returns:
-            Dictionary containing finger states.
-        """
+        if hand_label == "Left":
+            return "OPEN" if tip.x > joint.x else "CLOSED"
+
+        return "OPEN" if tip.x < joint.x else "CLOSED"
+
+    # -----------------------------
+    # OTHER FINGERS
+    # -----------------------------
+    def detect_finger(self, landmarks, finger_name):
+
+        tip = landmarks[self.tip_ids[finger_name]]
+        joint = landmarks[self.joint_ids[finger_name]]
+
+        if tip.y < joint.y:
+            return "OPEN"
+
+        return "CLOSED"
+
+    # -----------------------------
+    # MAIN FUNCTION
+    # -----------------------------
+    def detect_fingers(self, landmarks, hand_label):
 
         finger_states = {}
 
-        for i in range(4):
+        finger_states["Thumb"] = self.detect_thumb(
+            landmarks,
+            hand_label
+        )
 
-            tip = landmarks[self.tip_ids[i]]
-            joint = landmarks[self.joint_ids[i]]
+        for finger in ["Index", "Middle", "Ring", "Pinky"]:
 
-            # Finger is OPEN if fingertip is above the joint
-            if tip.y < joint.y:
-                finger_states[self.finger_names[i]] = "OPEN"
-            else:
-                finger_states[self.finger_names[i]] = "CLOSED"
+            finger_states[finger] = self.detect_finger(
+                landmarks,
+                finger
+            )
 
         return finger_states
